@@ -1,74 +1,0 @@
-EnjShape
-
-1) Make sure enjshape.rb and the enjshape directory are in your Sketchup plugins directory.For me this is:Windows -    C:\Program Files\Google\Google SketchUp 7\PluginsMac OS X -    /Library/Application Support/Google SketchUp 7/SketchUp/plugins2) Go to Preferences -> Extensions and activate the plugin ENJÕs Shapefile Importer3) Go to Plugins -> EnjShape -> Import Shapefile4) Open a Shapefile!
-
-Copyright (c) 2007-2009 Ian Johnson 
-<enjahova@gmail.com, http://enja.org/enjshape>
-
-== EnjShape License
-
-(The MIT Licence)
-
-Copyright (c) 2007-2008 Ian Johnson <enjahova@gmail.com>
-
-Permission is hereby granted, free of charge, to any person
-obtaining a copy of this software and associated documentation
-files (the "Software"), to deal in the Software without
-restriction, including without limitation the rights to use,
-copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the
-Software is furnished to do so, subject to the following
-conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.
-
-== DBF License
-* Official project page: http://rubyforge.org/projects/dbf
-* API Documentation: http://dbf.rubyforge.org/docs
-
-(The MIT Licence)
-
-Copyright (c) 2006-2007 Keith Morrison <keithm@infused.org>
-
-Permission is hereby granted, free of charge, to any person
-obtaining a copy of this software and associated documentation
-files (the "Software"), to deal in the Software without
-restriction, including without limitation the rights to use,
-copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the
-Software is furnished to do so, subject to the following
-conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.
-
-
-==SWA
-http://swajime.com/
-Thanks to SwaJime for http://www.swajime.com/ruby/swa.txt which taught me a lot and gives the latlong converting functionality through his LLAtude class.
-
-==Binary
-http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/23048
-Michael Neumann <neumann s-direktnet.de>
-merlin.zwo InfoDesign GmbH
-http://www.merlin-zwo.de
-

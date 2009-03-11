@@ -1,6 +1,6 @@
 
 class EnjShape
-  attr_accessor :minx, :miny, :maxx, :maxy, :shptype
+  attr_accessor :minx, :miny, :maxx, :maxy, :shptype, :numrecs
   SHPTYPES = {
   0 => "NullShape",
   1 => "Point",
@@ -91,6 +91,7 @@ class EnjShape
       records[recnum] = s
     end
     @records = records.sort #array with entries [recnum, shape]
+    @numrecs = @records.size()
     
   end
   
@@ -117,15 +118,14 @@ class EnjShape
     @records.each { |key, val| val.set_units(@units) }
   end
   
-  def render(entities, flatten, pushpull=["---"])
-    #puts "records size: #{@records.size()}"
-    #i = 0
-    #puts "records!"
-    if pushpull[0] != "---"
-      #@records.each { |key, val| val.render(entities, flatten, pushpull); i +=1  }
-      @records.each {|rec| rec[1].render(entities, flatten, pushpull)}
-    else
-      @records.each {|rec| rec[1].render(entities, flatten)}
+  def render(entities, flatten, pushpull, start, stop)
+
+    ra = @records[start...stop]
+    #puts "size: #{ra.size} start: #{ra[0][0]} stop: #{ra[ra.size-1][0]}"
+    ra.each {|rec| rec[1].render(entities, flatten, pushpull)}
+    #@records.each {|rec| rec[1].render(entities, flatten, pushpull)}
+    ##else
+      ##@records.each {|rec| rec[1].render(entities, flatten)}
       #@records.each { |key, val| eid = val.render(entities, flatten); i +=1  }
       #@records.keys.sort_by {|s| s.to_s}.map {|key| [key, @records[key]] }
       
@@ -142,7 +142,7 @@ class EnjShape
       
       
       #rec_array.each {|rec| puts "#{rec[0]}"; rec[1].render(entities, flatten)}
-    end
+    ##end
     #puts "records rendered: #{i}"
 
     
@@ -175,20 +175,24 @@ def loadShapeFile()
   shape.parseshp()
   dbf = shape.parsedbf()
   
-  #determine the units (latlong, meters or feet)
-  #units = "latlong"
-  #shape.set_units(units)
   #if latlong, flatten?
-  #suggest a center based on bounds, allow them to change
+  #center based on bounds
   centerx = shape.minx + (shape.maxx - shape.minx) / 2
   centery = shape.miny + (shape.maxy - shape.miny) / 2
 
   #ask the user a few things about their shapefile and how they want it rendered
-  loadDialog = UI::WebDialog.new()
+  loadDialog = UI::WebDialog.new("Load Shapefile")
   loadDialog.set_position(100,100)
-  loadDialog.set_size(400,320)
+  loadDialog.set_size(420,330)
   
-  shapename = shapefile.split('/')[-1] #should check for windows or mac, only splits for Mac
+  shapename = shapefile.split('/')[-1] 
+  #should check for windows or mac, only splits for Mac
+  #puts RUBY_PLATFORM
+  html_path = Sketchup.find_support_file "loadShape.html" ,"Plugins/enjshape"
+  puts html_path
+  loadDialog.set_file(html_path)
+  
+=begin 
   html_name = "Shapefile: #{shapename}<br>"
   html_bounds = "<table><tr><td>minx: #{shape.minx} </td><td>miny: #{shape.miny} </td></tr><tr><td>maxx: #{shape.maxx} </td><td>maxy: #{shape.maxy}</td></tr></table><br>"
   html_units = "Units: <select id='units'><option value='latlong'>latlong</option><option value='meters'>meters</options><option value='feet'>feet</options></select><br>"
@@ -209,77 +213,139 @@ def loadShapeFile()
   html += html_start_stop
   html += html_submit + "</body></html>"
   loadDialog.set_html(html)
+=end
   
   #loadDialog.set_file("load.html", $:[0] + "/enjshape/")
+  loadDialog.add_action_callback("loadParams") { |d, p| 
+    params = "{"
+    params += "'shapefile':'#{shapename}',"
+    params += "'bounds':{'minx':#{shape.minx}, 'miny':#{shape.miny}, 'maxx':#{shape.maxx}, 'maxy':#{shape.maxy}},"
+    if shape.shptype == 'Polygon'
+      params += "'polygon':true,"
+      params += "'dbffields':\"<option value='---' selected>---</option>"
+      cols = dbf.columns
+      cols.each { |c| params += "<option id='#{c.name}'>#{c.name}</option>"}
+      params += "\","
+    else
+      params += "'polygon':false,"
+    end
+    params += "records:#{shape.numrecs}"
+    params += "}"
+    #puts params
+    js_call = "gotParams(#{params});"
+    #puts js_call
+    #js_call = "window.alert('hello')"
+    d.execute_script(js_call)
+  }
+  
+  
   loadDialog.add_action_callback("render") { |d, p| 
+    puts "rendering!"
     units = d.get_element_value("units")
-    centerx = d.get_element_value("centerx").to_f
-    centery = d.get_element_value("centery").to_f
     start = d.get_element_value("start").to_i
     stop = d.get_element_value("stop").to_i
+
     
+    shape.set_units(units)
+    #puts "units in html: #{units}"
+    
+    if shape.shptype == "Polygon"
+      dpp = d.get_element_value("pushpull")
+      dpp_i = d.get_element_value("pushpull_i").to_f
+      #puts "#{dpp} and #{dpp_i}"
+      if dpp == "---" and dpp_i > 0
+        pushpull = [dpp, dpp_i]
+      else
+        pushpull = [dpp, dbf, d.get_element_value("pp_units")] #going to pass the column name as well as the dbf reader
+      end
+    else
+      pushpull = ["---", 0]
+    end
+    
+    d.close()
+    
+    
+    #add advanced option for these
+    flatten = true
+=begin    
     if units == "latlong"
       flatten = d.get_element_value("flatten") == "flatten"
     else
       flatten = true
     end
+=end
     
-    shape.set_units(units)
-    puts "units in html: #{units}"
-    
-    if shape.shptype == "Polygon"
-      pushpull = [d.get_element_value("pushpull"), dbf, d.get_element_value("pp_units")] #going to pass the column name as well as the dbf reader
+    nr = shape.numrecs
+    if stop > 0
+      if stop < start
+        #user error! should prompt.
+        temp = start
+        start = stop
+        stop = temp
+      end
+      if stop > nr
+        #user error! should prompt
+        stop = nr
+      end
+      if start < 0
+        #user error! should prompt
+        start = 0
+      end
+      render_shape(shape, units, [centerx, centery], flatten, pushpull, start, stop)
     else
-      pushpull = ["---"]
+    
+    
+      #handle large # of records
+      #sketchup seems to sputter when trying to render over 1000, this is an arbitrary hack
+      #in an attempt to make it stop skipping shapes. Works better but not perfect.
+      split = 20
+      if nr > split
+        rparts = nr / split
+        (0..rparts).each { |i|
+          start = i * split
+          stop = (i + 1) * split
+          if stop > nr
+            stop = nr
+          end
+          #puts "start: #{start} stop: #{stop}"
+          render_shape(shape, units, [centerx, centery], flatten, pushpull, start, stop)
+        }
+      else
+        start = 0
+        stop = nr
+        render_shape(shape, units, [centerx, centery], flatten, pushpull, start, stop)
+      end
+      
     end
     
-    d.close()
-    render_shape(shape, units, [centerx, centery], flatten, pushpull)
   }
   loadDialog.show()
   
 end
 
-def render_shape(shape, units, center, flatten, pushpull)
+def render_shape(shape, units, center, flatten, pushpull, start, stop)
 
   model = Sketchup.active_model
   model.start_operation $enjStrings.GetString("Import Shapefile")
   entities = model.active_entities
 
-  #should change this to center of bbox
   si = model.shadow_info
   
   si["Latitude"] = center[1]
   si["Longitude"] = center[0]
 
-  if pushpull[0] != "---"
-    #puts shape.shptype
-    shape.render(entities, flatten, pushpull)
-  else
-    shape.render(entities, flatten)
-  end
-  
-  # Count how many faces are in the current selection.
-  #selection = Sketchup.active_model.selection
-  face_count = 0
+  shape.render(entities, flatten, pushpull, start, stop)
 
+=begin
   # Look at all of the entities in the selection.
+  face_count = 0
   entities.each { |entity| 
     if entity.typename == "Face"
       face_count = face_count + 1
     end
   }
   puts "face count: #{face_count}"
-  
-  
-  #t = LLAtude.new([15.degrees, -117.degrees, 0.feet])
-  #puts shape.minx.to_s + " " + shape.miny.to_s
-  #puts t
-  #puts t.position
-  #Sketchup.active_model.active_entities.add_cpoint(t.position)
-  #Sketchup.active_model.active_entities.add_text(t.to_s, t.position)
-  #Sketchup.active_model.selection[0] 
-
+=end
   view = model.active_view
   newview = view.zoom_extents
   

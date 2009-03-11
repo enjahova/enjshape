@@ -6,21 +6,24 @@ require 'LangHandler.rb'
 require 'enjshape/binary'
 
 #dbf library
-#require 'date'
 require 'enjshape/dbfglobals'
 require 'enjshape/dbfrecord'
 require 'enjshape/dbfcolumn'
 require 'enjshape/dbftable'
+
+#latlon support library
 require 'enjshape/llatude'
-#shapes
+
+#handling shapefiles
 require 'enjshape/shapes'
 require 'enjshape/util'
 
+#loading code is in enjshape/load
 $enjStrings = LanguageHandler.new("EnjShape.strings")
 if $enjInfo.nil? then $enjInfo = {"about"=>SketchupExtension.new($enjStrings.GetString("ENJ's ShapeFile Importer"), "enjshape/load.rb")}; end
 $enjInfo["about"].creator = $enjStrings.GetString("Ian Johnson")
 $enjInfo["about"].copyright = $enjStrings.GetString("#{[0xA9].pack('U*')}2007-2009, Ian Johnson")
-$enjInfo["about"].version = ".2 - 03/15/2009"
+$enjInfo["about"].version = ".2 - 03/11/2009"
 $enjInfo["about"].description = $enjStrings.GetString(
      "Plugins -> EnjShape -> Import Shapefile.\r\n" +
      "Adds the ability to import ESRI Shapefiles to Sketchup.\r\n" +

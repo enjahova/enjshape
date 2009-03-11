@@ -1,0 +1,152 @@
+<html>
+<script>
+function loadParams()
+{
+	query = 'skp:loadParams@shape';
+	window.location.href = query;
+}
+
+function gotParams(params) 
+{
+	document.getElementById('shapefile').innerHTML = "Shapefile: " + params['shapefile'];
+	document.getElementById('minx').innerHTML = "minx: " + params['bounds']['minx'];
+	document.getElementById('miny').innerHTML = "miny: " + params['bounds']['miny'];
+	document.getElementById('maxx').innerHTML = "maxx: " + params['bounds']['maxx'];
+	document.getElementById('maxy').innerHTML = "maxy: " + params['bounds']['maxy'];
+	if(params['polygon'])
+	{
+		document.getElementById('pushpull').innerHTML = params['dbffields'];
+	}
+	else
+	{
+		document.getElementById('extend').innerHTML = "";
+	}
+	window.location.href = "#shapefile"
+}
+
+</script>
+
+<style>
+#shapefile {
+	display:block;
+	margin-left: auto;
+	margin-right: auto;
+	background-color: #FFCC99;
+	border: 1px solid #FFCC00;
+	padding: 5px;
+	margin: 5px;
+	text-align: center;
+}
+
+#bounds {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	/*background-color: #FFCC99;*/
+	background-color: #FFFF99;
+	border: 1px solid #FFCC00;
+	padding: 5px;
+	margin: 5px;
+	text-align: center;
+}
+
+#bounds table {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#bounds td
+{
+	background-color: #FFFFCC;
+	border: 1px solid #FFFFAA;
+	margin: 2px;
+	font-size:14px;
+}
+
+#unitbox {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	background-color: #FFCC99;
+	border: 1px solid #FFCC00;
+	padding: 5px;
+	margin: 5px;
+}
+
+#extend {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	background-color: #FFCC99;
+	border: 1px solid #FFCC00;
+	padding: 5px;
+	margin: 5px;
+	font-size: 12px;
+}
+
+#render {
+	/*display: block;
+	margin-left: auto;
+	margin-right: auto;*/
+	background-color: #FFCC99;
+	border: 1px solid #FFCC00;
+	padding: 5px;
+	margin: 5px;
+}
+
+#renderbutton {
+	display: block;
+	width: 80px;
+	height:30px;
+	background-color: #FF3300;
+	border: 1px solid #FFCC99;
+	color: #FFFFCC;
+	font-size: 20px;
+	text-align: center;
+}
+
+</style>
+
+<body onload="loadParams()">
+	<h3 id="shapefile">Shapefile: </h3>
+	
+	<div id="bounds">
+		<table>
+			<tr><td id="minx">minx: </td><td id="miny">miny: </td></tr>
+			<tr><td id="maxx">maxx: </td><td id="maxy">maxy: </td></tr>
+		</table>
+	</div>
+	
+	<div id="unitbox">Shapefile Units: 
+		<select id='units'>
+			<option value='latlong'>latlong</option>
+			<option value='meters'>meters</options>
+			<option value='feet'>feet</options>
+		</select>
+	</div>
+	
+	<div id="extend">
+		<select id='pushpull'>
+		</select> Extend your shapes vertically by selected field
+		<br> <input id='pushpull_i' type='text' size='5' value='0'> or input a value
+		<br><select id='pp_units'>
+			<option value='meters'>meters</options>
+			<option value='feet'>feet</options>
+		</select>
+		<br>
+	</div>
+	
+	<div id="startstop">
+		<!--
+		start: <input id='start' type='text' size='5' value='0'> <br>
+		stop: <input id='stop' type='text' size='5' value='0'><br>
+		-->
+	</div>
+	
+	<div id="render">
+		<input id="renderbutton" type=submit value="Render" onclick="window.location='skp:render@shape'">
+	</div>
+
+</body>
+</html>

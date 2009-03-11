@@ -39,7 +39,7 @@ class Polygon < Shape
     ##puts "#{@recnum} numparts: #{@numparts} points: #{@points.size()}"
   end
   
-  def render(entities, flatten, pushpull=["---"])
+  def render(entities, flatten, pushpull)
     #faces = []
     #handle the pushpull
     if pushpull[0] != "---"
@@ -52,7 +52,11 @@ class Polygon < Shape
         pp = pp.feet
       end
     else
-      pp = 0
+      if pushpull[1] > 0
+        pp = pushpull[1]
+      else
+        pp = 0
+      end
     end
     
     if @numparts == 1
@@ -70,6 +74,7 @@ class Polygon < Shape
         #return face.entityID
       rescue
         puts "record: #{@recnum} had a problem"
+        puts $ERROR_INFO.inspect
         #pts3d.each { |p| puts "p3d #{p}"}
       #  puts "dupicate points probably: #{@recnum}"
       #  p3d = strip_duplicates(pts3d)

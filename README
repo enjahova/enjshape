@@ -1,6 +1,18 @@
 EnjShape
 
-1) Make sure enjshape.rb and the enjshape directory are in your Sketchup plugins directory.For me this is:Windows -    C:\Program Files\Google\Google SketchUp 7\PluginsMac OS X -    /Library/Application Support/Google SketchUp 7/SketchUp/plugins2) Go to Preferences -> Extensions and activate the plugin ENJÕs Shapefile Importer3) Go to Plugins -> EnjShape -> Import Shapefile4) Open a Shapefile!
+1) Make sure enjshape.rb and the enjshape directory are in your Sketchup plugins directory.
+For me this is:
+Windows -
+
+    C:\Program Files\Google\Google SketchUp 7\Plugins
+
+Mac OS X -
+
+    /Library/Application Support/Google SketchUp 7/SketchUp/plugins
+
+2) Go to Preferences -> Extensions and activate the plugin ENJ's Shapefile Importer
+3) Go to Plugins -> EnjShape -> Import Shapefile
+4) Open a Shapefile!
 
 Copyright (c) 2007-2009 Ian Johnson 
 <enjahova@gmail.com, http://enja.org/enjshape>

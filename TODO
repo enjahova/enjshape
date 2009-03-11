@@ -1,0 +1,21 @@
+###
+# enjshape
+# Ian Johnson
+# enjahova@gmail.com
+###
+
+TODO:
+* test more with windows
+* add more robust data verification (check for bad polygons). A bad polygon can cause every polygon before it not to render
+* create advanced options for loading in shape files (rendering a range of shapes, flatten vs. world coordinates)
+* add support for more shapetypes
+* figure out why sketchup skips rendering some faces when rendering a large number
+* improve webdialog UI (loadShape.html)
+
+
+FIXES + FEATURES:
+0.1 -> 0.2
+* Too many to mention
+* properly treats shapefile units (importing with feet doesn't blow up)
+* checks for duplicate points in polygons
+* refactored code
